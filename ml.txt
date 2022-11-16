@@ -1,0 +1,57 @@
+%matplotlib inline
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+X = np.array([[1,2104,5,1,45],
+              [1,1416,3,2,40],
+              [1,1534,3,2,30],
+              [1,852 ,2,1,36]])
+Y = np.array([[1],[2],[3],[4]])
+theta = np.array([[0],[0],[0],[0],[0]])
+m =4
+
+print("X = \n",X)
+print("Y = \n",Y)
+print("0 = \n",theta)
+
+
+Y_hat = X.dot(theta)
+print("y^ = ",Y_hat)
+
+print(Y_hat - Y)
+
+sqrError = (Y_hat - Y).transpose().dot(Y_hat - Y)
+print("sqrError = ",sqrError)
+
+j = 1/(2*m) * sqrError
+print("j = ",j[0][0])
+
+def computecost(X,Y,theta):
+    m = len(y)
+    y_hat = X.dot(theta)
+    sqrError = (y_hat - y).transpose().dot(y_hat - y)
+    j = 1/(2*m) * sqrError
+    return j
+
+print("j = ",computecost(X,Y,theta))
+alpha = 0.1
+new_theta = theta - alpha/m * ((Y_hat - Y).transpose().dot(X)).transpose()
+print("old theta = \n",theta)
+print("new theta = \n",new_theta)
+def gredient_descent(x,y,theta,alpha,num_iters):
+    m = len(y)
+    j_history = []
+    for i in range(num_iters):
+        j = computecost(X,Y,theta)
+        print("iteration: ",i,"theta = [",round(theta[0][0],3),",",round(theta[1][0],3),"] \tcost = ",round(j[0][0],3))
+        j_history.append(j[0][0])
+        Y_hat = X.dot(theta)
+        theta = theta - alpha/m * ((Y_hat-Y).transpose().dot(X)).transpose()
+    return j_history
+
+j_hist = gredient_descent(X,Y,theta,alpha,6)
+plt.plot(j_hist, color='red');
+plt.xlabel('Training Step')
+plt.ylabel('J Cost')
+plt.show()
